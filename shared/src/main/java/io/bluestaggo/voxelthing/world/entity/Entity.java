@@ -70,9 +70,19 @@ public class Entity {
 	private void updateCollisionBox() {
 		collisionBox.setBounds(posX - width, posY, posZ - width, posX + width, posY + height, posZ + width, null);
 	}
+	private boolean isMovingXZ(){
+		if (
+				velX>0.1f||velX<=-0.1f||
+				velZ>0.1f||velZ<=-0.1f
+		){
+			return true;
+		}
+		return false;
+	}
 
 	private void updateMovement() {
 		wasOnGround = onGround;
+		float tmp=0.f;
 		if (!noClip) {
 			updateCollisionBox();
 			List<AABB> intersectingBoxes = world.getSurroundingCollision(collisionBox.expandToPoint(velX, velY, velZ, offsetBox));
@@ -80,6 +90,11 @@ public class Entity {
 			double oldVelY = velY;
 
 			for (AABB box : intersectingBoxes) {
+				if (box.maxY-this.posY==0.5f&&velY<0.1f&&velY>=-0.1f&&isMovingXZ()){
+					tmp=0.8f;
+				}
+				System.out.println(box.maxY-this.posY);
+
 				velY = box.calcYOffset(collisionBox, velY);
 			}
 			collisionBox.offset(0.0, velY, 0.0, collisionBox);
@@ -100,7 +115,7 @@ public class Entity {
 		}
 
 		posX += velX;
-		posY += velY;
+		posY += velY+tmp;
 		posZ += velZ;
 		updateCollisionBox();
 	}

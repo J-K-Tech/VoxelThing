@@ -2,6 +2,7 @@ package io.bluestaggo.voxelthing.world;
 
 import io.bluestaggo.voxelthing.world.block.Block;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 public class BlockRaycast {
 	public static final float STEP_DISTANCE = 1.0f / 16.0f;
@@ -28,6 +29,13 @@ public class BlockRaycast {
 			this.hitZ = hitZ;
 			this.hitFace = hitFace;
 		}
+	}
+
+	public Vector3f getHitf(){
+		return new Vector3f((float) hitX,(float) hitY,(float) hitZ);
+	}
+	public Vector3d getHitd(){
+		return new Vector3d((double) hitX,(double) hitY,(double) hitZ);
 	}
 
 	public int getHitX() {

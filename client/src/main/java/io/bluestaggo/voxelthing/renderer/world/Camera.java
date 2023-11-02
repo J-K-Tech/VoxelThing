@@ -47,18 +47,22 @@ public class Camera {
 	}
 
 	public void setPosition(float x, float y, float z) {
+		Vector3d f= getRaycast(5).getHitd();
 		position.x = x;
 		position.y = y;
 		position.z = z;
 		offset.add(position, offsetPosition);
+		offset.ceil(f);
 		updateVectors();
 	}
 
 	public void addPosition(float x, float y, float z) {
+		Vector3d f= getRaycast(5).getHitd();
 		position.x += x;
 		position.y += y;
 		position.z += z;
 		offset.add(position, offsetPosition);
+		offset.ceil(f);
 		updateVectors();
 	}
 
@@ -108,6 +112,7 @@ public class Camera {
 			right.rotateY((float) Math.toRadians(180.0));
 		}
 		right.cross(front, up);
+
 		position.add(front, target);
 		frustum.set(getViewProj(viewProj));
 	}
