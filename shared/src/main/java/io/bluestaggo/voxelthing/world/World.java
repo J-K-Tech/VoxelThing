@@ -172,10 +172,11 @@ public class World implements IBlockAccess {
 				for (int z = minZ; z < maxZ; z++) {
 					Block block = getBlock(x, y, z);
 					if (block != null) {
-						boxes.add(block.getCollisionBox(x, y, z));
 						if (block instanceof BlockStair){
+							System.out.println(block.getClass());
 							boxes.add(((BlockStair) block).getCollisionBoxSecondary(x, y, z));
 						}
+						boxes.add(block.getCollisionBox(x, y, z));
 					}
 				}
 			}

@@ -22,11 +22,7 @@ public class BlockStair extends Block {
     }
 
     public AABB getCollisionBoxSecondary(int x, int y, int z) {
-        switch (side) {
-            case 1:
-                break;
-        }
-        return new AABB(x, y + .5f, z, x + .5f, y + .1f, z + 1.f);
+        return new AABB(x+.0f, y, z, x + 1.f, y + 1.f, z + .5f);
 
     }
 }

@@ -4,6 +4,7 @@ import io.bluestaggo.pds.CompoundItem;
 import io.bluestaggo.voxelthing.math.AABB;
 import io.bluestaggo.voxelthing.math.MathUtil;
 import io.bluestaggo.voxelthing.world.World;
+import io.bluestaggo.voxelthing.world.block.BlockStair;
 
 import java.util.List;
 
@@ -90,10 +91,10 @@ public class Entity {
 			double oldVelY = velY;
 
 			for (AABB box : intersectingBoxes) {
+				if (box.minX+.7f==box.maxX){System.out.println("hahahahah");}
 				if (box.maxY-this.posY==0.5f&&velY<0.1f&&velY>=-0.1f&&isMovingXZ()){
 					tmp=0.61;
 				}
-				System.out.println(box.maxY-this.posY);
 
 				velY = box.calcYOffset(collisionBox, velY);
 			}
