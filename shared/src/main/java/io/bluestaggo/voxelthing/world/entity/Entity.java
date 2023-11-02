@@ -82,7 +82,7 @@ public class Entity {
 
 	private void updateMovement() {
 		wasOnGround = onGround;
-		float tmp=0.f;
+		double tmp=0.;
 		if (!noClip) {
 			updateCollisionBox();
 			List<AABB> intersectingBoxes = world.getSurroundingCollision(collisionBox.expandToPoint(velX, velY, velZ, offsetBox));
@@ -91,7 +91,7 @@ public class Entity {
 
 			for (AABB box : intersectingBoxes) {
 				if (box.maxY-this.posY==0.5f&&velY<0.1f&&velY>=-0.1f&&isMovingXZ()){
-					tmp=0.8f;
+					tmp=0.61;
 				}
 				System.out.println(box.maxY-this.posY);
 

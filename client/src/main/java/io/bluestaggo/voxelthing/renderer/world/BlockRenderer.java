@@ -5,6 +5,7 @@ import io.bluestaggo.voxelthing.world.Direction;
 import io.bluestaggo.voxelthing.world.IBlockAccess;
 import io.bluestaggo.voxelthing.world.block.Block;
 import io.bluestaggo.voxelthing.world.block.BlockSlab;
+import io.bluestaggo.voxelthing.world.block.BlockStair;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import org.joml.Vector2i;
 
@@ -58,7 +59,17 @@ public class BlockRenderer {
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
 		float top = 1.f;
-		if (block instanceof BlockSlab){top=.5f;}
+		if (block instanceof BlockSlab||block instanceof BlockStair){top=.5f;
+			if (block instanceof BlockStair){
+				addVertices(bindings,   x + 1.f,  y + 1.f,  z,  shade,  shade,  shade,  texX,   texY    );
+				addVertices(bindings,   x + 1.f,  y+ .5f,      z,  shade,  shade,  shade,  texX,   texYp   );
+				addVertices(bindings,   x,      y+ .5f,      z,  shade,  shade,  shade,  texXp,  texYp   );
+				addVertices(bindings,   x,      y + 1.f,  z,  shade,  shade,  shade,  texXp,  texY    );
+				bindings.addIndices(0, 1, 2, 2, 3, 0);
+
+			}
+		}
+		texYp = texY + (Block.TEXTURE_WIDTH*top);
 
 		addVertices(bindings,   x + 1,  y + top,  z,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x + 1,  y,      z,  shade,  shade,  shade,  texX,   texYp   );
@@ -79,7 +90,17 @@ public class BlockRenderer {
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
 		float top = 1.f;
-		if (block instanceof BlockSlab){top=.5f;}
+		if (block instanceof BlockSlab||block instanceof BlockStair){top=.5f;
+			if (block instanceof BlockStair){
+				addVertices(bindings,   x,      y + 1.f,  z + .5f,  shade,  shade,  shade,  texX,   texY    );
+				addVertices(bindings,   x,      y+ .5f,      z + .5f,  shade,  shade,  shade,  texX,   texYp   );
+				addVertices(bindings,   x + 1,  y+.5f,      z + .5f,  shade,  shade,  shade,  texXp,  texYp   );
+				addVertices(bindings,   x + 1,  y + 1.f,  z + .5f,  shade,  shade,  shade,  texXp,  texY    );
+				bindings.addIndices(0, 1, 2, 2, 3, 0);
+
+			}
+		}
+		texYp = texY + (Block.TEXTURE_WIDTH*top);
 
 		addVertices(bindings,   x,      y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x,      y,      z + 1,  shade,  shade,  shade,  texX,   texYp   );
@@ -96,11 +117,21 @@ public class BlockRenderer {
 		float texYp = texY + Block.TEXTURE_WIDTH;
 		byte shade = getShade(2);
 		float top = 1.f;
-		if (block instanceof BlockSlab){top=.5f;}
 
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
+		if (block instanceof BlockSlab||block instanceof BlockStair){top=.5f;
+			if (block instanceof BlockStair){
+				addVertices(bindings,   x,  y + 1,  z,      shade,  shade,  shade,  texX,   texY    );
+				addVertices(bindings,   x,  y+.5f,      z,      shade,  shade,  shade,  texX,   texYp   );
+				addVertices(bindings,   x,  y+.5f,      z + .5f,  shade,  shade,  shade,  texXp,  texYp   );
+				addVertices(bindings,   x,  y + 1,  z + .5f,  shade,  shade,  shade,  texXp,  texY    );
+				bindings.addIndices(0, 1, 2, 2, 3, 0);
+
+			}
+		}
+		texYp = texY + (Block.TEXTURE_WIDTH*top);
 
 		addVertices(bindings,   x,  y + top,  z,      shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x,  y,      z,      shade,  shade,  shade,  texX,   texYp   );
@@ -117,11 +148,19 @@ public class BlockRenderer {
 		float texYp = texY + Block.TEXTURE_WIDTH;
 		byte shade = getShade(2);
 		float top = 1.f;
-		if (block instanceof BlockSlab){top=.5f;}
-
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
+		if (block instanceof BlockSlab||block instanceof BlockStair){top=.5f;
+			if (block instanceof BlockStair){
+				addVertices(bindings,   x + 1,  y + 1,  z + .5f,  shade,  shade,  shade,  texX,   texY    );
+				addVertices(bindings,   x + 1,  y+.5f,      z + .5f,  shade,  shade,  shade,  texX,   texYp   );
+				addVertices(bindings,   x + 1,  y+.5f,      z,      shade,  shade,  shade,  texXp,  texYp   );
+				addVertices(bindings,   x + 1,  y + 1,  z,      shade,  shade,  shade,  texXp,  texY    );
+
+			}
+		}
+		texYp = texY + (Block.TEXTURE_WIDTH*top);
 
 		addVertices(bindings,   x + 1,  y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x + 1,  y,      z + 1,  shade,  shade,  shade,  texX,   texYp   );
@@ -161,7 +200,15 @@ public class BlockRenderer {
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
 		float top = 1.f;
-		if (block instanceof BlockSlab){top=.5f;}
+		if (block instanceof BlockSlab||block instanceof BlockStair){top=.5f;
+		if (block instanceof BlockStair){
+			addVertices(bindings,   x + 1,  y + 1,  z + .5f,  shade,  shade,  shade,  texX,   texY    );
+			addVertices(bindings,   x + 1,  y + 1,  z,      shade,  shade,  shade,  texX,   texYp   );
+			addVertices(bindings,   x,      y + 1,  z,      shade,  shade,  shade,  texXp,  texYp   );
+			addVertices(bindings,   x,      y + 1,  z + .5f,  shade,  shade,  shade,  texXp,  texY    );
+
+		}
+		}
 
 		addVertices(bindings,   x + 1,  y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x + 1,  y + top,  z,      shade,  shade,  shade,  texX,   texYp   );

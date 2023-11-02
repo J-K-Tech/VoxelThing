@@ -4,6 +4,7 @@ import io.bluestaggo.pds.CompoundItem;
 import io.bluestaggo.voxelthing.math.AABB;
 import io.bluestaggo.voxelthing.math.MathUtil;
 import io.bluestaggo.voxelthing.world.block.Block;
+import io.bluestaggo.voxelthing.world.block.BlockStair;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import io.bluestaggo.voxelthing.world.generation.GenCache;
 import io.bluestaggo.voxelthing.world.generation.GenerationInfo;
@@ -172,6 +173,9 @@ public class World implements IBlockAccess {
 					Block block = getBlock(x, y, z);
 					if (block != null) {
 						boxes.add(block.getCollisionBox(x, y, z));
+						if (block instanceof BlockStair){
+							boxes.add(((BlockStair) block).getCollisionBoxSecondary(x, y, z));
+						}
 					}
 				}
 			}

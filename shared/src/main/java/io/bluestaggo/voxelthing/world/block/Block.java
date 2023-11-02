@@ -17,6 +17,14 @@ public class Block {
 	public static final int TEXTURE_ROWS = TEXTURE_RES / 16;
 	public static final float TEXTURE_WIDTH = 1.0f / TEXTURE_ROWS;
 
+	public static int NORTH=0;
+	public static int SOUTH=1;
+	public static int WEST=2;
+	public static int EAST=3;
+	public boolean upsideDown=false;
+
+	public int side=0;
+
 	private static final List<Block> REGISTERED_BLOCKS_ORDERED_MUTABLE = new ArrayList<>();
 	private static final Map<Identifier, Block> REGISTERED_BLOCKS_MUTABLE = new HashMap<>();
 	public static final List<Block> REGISTERED_BLOCKS_ORDERED = Collections.unmodifiableList(REGISTERED_BLOCKS_ORDERED_MUTABLE);
@@ -53,6 +61,7 @@ public class Block {
 	public static final Block LEAVES = new Block("leaves").withTex(4, 0).transparency(BlockTransparency.THICK);
 	public static final Block GLASS = new Block("glass").withTex(4, 2).transparency(BlockTransparency.FULL);
 	public static final Block SAND = new Block("sand").withTex(2, 0);
+	public static final BlockStair STONE_STAIR = (BlockStair) new BlockStair("stone_stair").withTex(1, 0);
 	public static final Block GRAVEL = new Block("gravel").withTex(2, 1);
 	public static final Block STONE_BRICKS = new Block("stone_bricks").withTex(2, 2);
 	public static final Block POLISHED_STONE = new Block("polished_stone").withTex(1, 2);
@@ -130,7 +139,7 @@ public class Block {
 
 	public boolean isFaceDrawn(IBlockAccess blockAccess, int x, int y, int z, Direction face) {
 		Block block = blockAccess.getBlock(x, y, z);
-		if (block == null||block instanceof BlockSlab) {
+		if (block == null||block instanceof BlockSlab||block instanceof BlockStair) {
 			return true;
 		}
 
