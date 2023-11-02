@@ -44,6 +44,7 @@ public class Block {
 	public static final Identifier ID_AIR = new Identifier("air");
 	public static final Block STONE = new Block("stone").withTex(1, 0);
 	public static final Block GRASS = new Block("grass").withTex(new GrassTexture(0, 1, 0, 0, 0, 2));
+	public static final BlockSlab STONE_SLAB = (BlockSlab) new BlockSlab("stone_slab").withTex(1, 0);
 	public static final Block DIRT = new Block("dirt").withTex(0, 2);
 	public static final Block COBBLESTONE = new Block("cobblestone").withTex(1, 1);
 	public static final Block BRICKS = new Block("bricks").withTex(3, 2);
@@ -129,7 +130,7 @@ public class Block {
 
 	public boolean isFaceDrawn(IBlockAccess blockAccess, int x, int y, int z, Direction face) {
 		Block block = blockAccess.getBlock(x, y, z);
-		if (block == null) {
+		if (block == null||block instanceof BlockSlab) {
 			return true;
 		}
 

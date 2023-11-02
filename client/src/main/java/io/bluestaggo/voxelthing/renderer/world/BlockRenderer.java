@@ -4,6 +4,7 @@ import io.bluestaggo.voxelthing.renderer.vertices.MixedBindings;
 import io.bluestaggo.voxelthing.world.Direction;
 import io.bluestaggo.voxelthing.world.IBlockAccess;
 import io.bluestaggo.voxelthing.world.block.Block;
+import io.bluestaggo.voxelthing.world.block.BlockSlab;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import org.joml.Vector2i;
 
@@ -56,11 +57,13 @@ public class BlockRenderer {
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
+		float top = 1.f;
+		if (block instanceof BlockSlab){top=.5f;}
 
-		addVertices(bindings,   x + 1,  y + 1,  z,  shade,  shade,  shade,  texX,   texY    );
+		addVertices(bindings,   x + 1,  y + top,  z,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x + 1,  y,      z,  shade,  shade,  shade,  texX,   texYp   );
 		addVertices(bindings,   x,      y,      z,  shade,  shade,  shade,  texXp,  texYp   );
-		addVertices(bindings,   x,      y + 1,  z,  shade,  shade,  shade,  texXp,  texY    );
+		addVertices(bindings,   x,      y + top,  z,  shade,  shade,  shade,  texXp,  texY    );
 		bindings.addIndices(0, 1, 2, 2, 3, 0);
 	}
 
@@ -75,11 +78,13 @@ public class BlockRenderer {
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
+		float top = 1.f;
+		if (block instanceof BlockSlab){top=.5f;}
 
-		addVertices(bindings,   x,      y + 1,  z + 1,  shade,  shade,  shade,  texX,   texY    );
+		addVertices(bindings,   x,      y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x,      y,      z + 1,  shade,  shade,  shade,  texX,   texYp   );
 		addVertices(bindings,   x + 1,  y,      z + 1,  shade,  shade,  shade,  texXp,  texYp   );
-		addVertices(bindings,   x + 1,  y + 1,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
+		addVertices(bindings,   x + 1,  y + top,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
 		bindings.addIndices(0, 1, 2, 2, 3, 0);
 	}
 
@@ -90,15 +95,17 @@ public class BlockRenderer {
 		float texXp = texX + Block.TEXTURE_WIDTH;
 		float texYp = texY + Block.TEXTURE_WIDTH;
 		byte shade = getShade(2);
+		float top = 1.f;
+		if (block instanceof BlockSlab){top=.5f;}
 
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
 
-		addVertices(bindings,   x,  y + 1,  z,      shade,  shade,  shade,  texX,   texY    );
+		addVertices(bindings,   x,  y + top,  z,      shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x,  y,      z,      shade,  shade,  shade,  texX,   texYp   );
 		addVertices(bindings,   x,  y,      z + 1,  shade,  shade,  shade,  texXp,  texYp   );
-		addVertices(bindings,   x,  y + 1,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
+		addVertices(bindings,   x,  y + top,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
 		bindings.addIndices(0, 1, 2, 2, 3, 0);
 	}
 
@@ -109,15 +116,17 @@ public class BlockRenderer {
 		float texXp = texX + Block.TEXTURE_WIDTH;
 		float texYp = texY + Block.TEXTURE_WIDTH;
 		byte shade = getShade(2);
+		float top = 1.f;
+		if (block instanceof BlockSlab){top=.5f;}
 
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
 
-		addVertices(bindings,   x + 1,  y + 1,  z + 1,  shade,  shade,  shade,  texX,   texY    );
+		addVertices(bindings,   x + 1,  y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
 		addVertices(bindings,   x + 1,  y,      z + 1,  shade,  shade,  shade,  texX,   texYp   );
 		addVertices(bindings,   x + 1,  y,      z,      shade,  shade,  shade,  texXp,  texYp   );
-		addVertices(bindings,   x + 1,  y + 1,  z,      shade,  shade,  shade,  texXp,  texY    );
+		addVertices(bindings,   x + 1,  y + top,  z,      shade,  shade,  shade,  texXp,  texY    );
 		bindings.addIndices(0, 1, 2, 2, 3, 0);
 	}
 
@@ -151,11 +160,13 @@ public class BlockRenderer {
 		x -= chunk.x << Chunk.SIZE_POW2;
 		y -= chunk.y << Chunk.SIZE_POW2;
 		z -= chunk.z << Chunk.SIZE_POW2;
+		float top = 1.f;
+		if (block instanceof BlockSlab){top=.5f;}
 
-		addVertices(bindings,   x + 1,  y + 1,  z + 1,  shade,  shade,  shade,  texX,   texY    );
-		addVertices(bindings,   x + 1,  y + 1,  z,      shade,  shade,  shade,  texX,   texYp   );
-		addVertices(bindings,   x,      y + 1,  z,      shade,  shade,  shade,  texXp,  texYp   );
-		addVertices(bindings,   x,      y + 1,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
+		addVertices(bindings,   x + 1,  y + top,  z + 1,  shade,  shade,  shade,  texX,   texY    );
+		addVertices(bindings,   x + 1,  y + top,  z,      shade,  shade,  shade,  texX,   texYp   );
+		addVertices(bindings,   x,      y + top,  z,      shade,  shade,  shade,  texXp,  texYp   );
+		addVertices(bindings,   x,      y + top,  z + 1,  shade,  shade,  shade,  texXp,  texY    );
 		bindings.addIndices(0, 1, 2, 2, 3, 0);
 	}
 
