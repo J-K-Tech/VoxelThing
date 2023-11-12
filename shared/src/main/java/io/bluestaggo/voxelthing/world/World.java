@@ -12,8 +12,10 @@ import io.bluestaggo.voxelthing.world.storage.ChunkStorage;
 import io.bluestaggo.voxelthing.world.storage.EmptySaveHandler;
 import io.bluestaggo.voxelthing.world.storage.ISaveHandler;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +26,8 @@ public class World implements IBlockAccess {
 
 	public final Random random = new Random();
 	public final WorldInfo info;
+
+	public Dictionary<Vector3i,List<Vector3i>> blocksWannaRender;
 
 	public double partialTick;
 
@@ -53,6 +57,28 @@ public class World implements IBlockAccess {
 		chunkStorage = new ChunkStorage(this);
 		genCache = new GenCache(this);
 		this.saveHandler = saveHandler;
+	}
+
+	public void tick(){
+		for (int i=0;i<Chunk.tickingBlocks.size();i++){
+			Vector3i[] blockPoss=Chunk.tickingBlocks.get(i);
+			Vector3i chp=new Vector3i(blockPoss[0].x,blockPoss[0].y,blockPoss[0].z);
+			Vector3i blp=new Vector3i(blockPoss[1].x,blockPoss[1].y,blockPoss[1].z);
+			chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
+					.getBlock(blp.x,blp.y,blp.z).tick();
+			if (chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
+					.getBlock(blp.x,blp.y,blp.z).renderAtTick){
+				if (this.blocksWannaRender.get(chp)==null){
+					List<Vector3i> blocks=new ArrayList<>();
+					blocks.add(blp);
+					this.blocksWannaRender.put(chp, blocks);
+				}
+				else {
+					this.blocksWannaRender.get(chp).add(blp);
+
+				}
+			}
+		}
 	}
 
 	public Chunk getChunkAt(int x, int y, int z) {
@@ -201,6 +227,14 @@ public class World implements IBlockAccess {
 				if (collision.contains(pos.x, pos.y, pos.z)) {
 					raycast.setResult(x, y, z, collision.getClosestFace(pos, dir));
 					return true;
+				}
+				if (block instanceof BlockStair){
+					collision = ((BlockStair) block).getCollisionBoxSecondary(x, y, z);
+					if (collision.contains(pos.x, pos.y, pos.z)) {
+						raycast.setResult(x, y, z, collision.getClosestFace(pos, dir));
+						return true;
+					}
+
 				}
 			}
 

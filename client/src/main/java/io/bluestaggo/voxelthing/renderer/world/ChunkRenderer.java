@@ -9,6 +9,7 @@ import io.bluestaggo.voxelthing.world.ChunkCache;
 import io.bluestaggo.voxelthing.world.World;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 public class ChunkRenderer {
 	private final MainRenderer renderer;
@@ -21,6 +22,10 @@ public class ChunkRenderer {
 	private boolean chunksLoaded;
 	private double firstAppearance;
 	private MixedBindings bindings;
+
+	public Vector3i getPos(){
+		return new Vector3i(this.x,this.y,this.z);
+	}
 
 	public ChunkRenderer(MainRenderer renderer, World world, int x, int y, int z) {
 		this.renderer = renderer;
@@ -74,7 +79,8 @@ public class ChunkRenderer {
 			for (int xx = 0; xx < Chunk.LENGTH; xx++) {
 				for (int yy = 0; yy < Chunk.LENGTH; yy++) {
 					for (int zz = 0; zz < Chunk.LENGTH; zz++) {
-						 empty &= !renderer.blockRenderer.render(bindings, cache, chunk, xx, yy, zz);
+
+						empty &= !renderer.blockRenderer.render(bindings, cache, chunk, xx, yy, zz);
 					}
 				}
 			}
@@ -89,6 +95,16 @@ public class ChunkRenderer {
 
 			needsUpdate = false;
 		}
+
+	}
+
+	public void renderTicking(Vector3i[] blocks){
+		Chunk chunk = world.getOrLoadChunkAt(x, y, z);
+
+		for (Vector3i block:blocks){
+			new BlockRenderer().render(bindings, cache, chunk, block.x, block.y, block.z);
+		}
+
 	}
 
 	public void draw() {

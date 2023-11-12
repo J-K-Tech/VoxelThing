@@ -39,9 +39,14 @@ public class BlockRenderer {
 		int yy = y + Chunk.LENGTH * chunk.y;
 		int zz = z + Chunk.LENGTH * chunk.z;
 		for (Direction dir : Direction.ALL) {
-			if (block.isFaceDrawn(blockAccess, xx + dir.X, yy + dir.Y, zz + dir.Z, dir)) {
+			if (block instanceof BlockStair){
 				SIDE_RENDERERS[dir.ordinal()].render(bindings, blockAccess, chunk, block, xx, yy, zz);
 			}
+			else{
+			if (block.isFaceDrawn(blockAccess, xx + dir.X, yy + dir.Y, zz + dir.Z, dir)) {
+				SIDE_RENDERERS[dir.ordinal()].render(bindings, blockAccess, chunk, block, xx, yy, zz);
+			}}
+
 		}
 
 		return true;

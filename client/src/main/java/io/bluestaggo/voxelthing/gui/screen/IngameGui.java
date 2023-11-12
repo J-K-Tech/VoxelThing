@@ -102,12 +102,6 @@ public class IngameGui extends GuiScreen {
 					+ Math.max(game.player.getFallAmount() * 0.1, -0.25)) * handSize;
 		}
 
-		r.draw2D.drawQuad(Quad.shared()
-				.at(r.screen.getWidth() - handSize + bobX,
-						r.screen.getHeight() - handSize + bobY + handSize / 4.0f)
-				.size(handSize, handSize)
-				.withTexture(playerTexture)
-				.withUV(1.0f - playerTexture.uCoord(32), 1.0f - playerTexture.vCoord(32), 1.0f, 1.0f));
 
 		if (block != null) {
 			Vector2i texture = block.getTexture().get(Direction.NORTH);
@@ -129,6 +123,12 @@ public class IngameGui extends GuiScreen {
 					.offset(handSize * 0.35f, 0.0f)
 					.withColor(0.75f, 0.75f, 0.75f));
 		}
+		r.draw2D.drawQuad(Quad.shared()
+				.at(r.screen.getWidth() - handSize + bobX,
+						r.screen.getHeight() - handSize + bobY + handSize / 4.0f)
+				.size(handSize, handSize)
+				.withTexture(playerTexture)
+				.withUV(1.0f - playerTexture.uCoord(32), 1.0f - playerTexture.vCoord(32), 1.0f, 1.0f));
 	}
 
 	private void drawHotbar() {

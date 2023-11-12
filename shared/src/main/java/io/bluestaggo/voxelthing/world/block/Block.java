@@ -25,6 +25,13 @@ public class Block {
 
 	public int side=0;
 
+	public boolean renderAtTick=false;
+	public boolean doesTick=false;
+
+	private int tickrate=-1;
+
+	private int tick=0;
+
 	private static final List<Block> REGISTERED_BLOCKS_ORDERED_MUTABLE = new ArrayList<>();
 	private static final Map<Identifier, Block> REGISTERED_BLOCKS_MUTABLE = new HashMap<>();
 	public static final List<Block> REGISTERED_BLOCKS_ORDERED = Collections.unmodifiableList(REGISTERED_BLOCKS_ORDERED_MUTABLE);
@@ -77,6 +84,8 @@ public class Block {
 		REGISTERED_BLOCKS_MUTABLE.put(ID_AIR, null);
 	}
 
+
+
 	public Block(String id) {
 		this(new Identifier(id));
 	}
@@ -93,6 +102,19 @@ public class Block {
 		this.id = id;
 		REGISTERED_BLOCKS_ORDERED_MUTABLE.add(this);
 		REGISTERED_BLOCKS_MUTABLE.put(id, this);
+	}
+
+	public void setTicks(boolean ticks) {
+		this.doesTick = ticks;
+	}
+
+	public Block thatTicks(){
+		this.doesTick=true;
+		return this;
+	}
+	public Block thatRenderAtTick(){
+		this.renderAtTick=true;
+		return this;
 	}
 
 	public static Block fromId(Identifier id) {
@@ -157,4 +179,6 @@ public class Block {
 	public AABB getCollisionBox(int x, int y, int z) {
 		return new AABB(x, y, z, x + 1, y + 1, z + 1);
 	}
+
+	public void tick(){}
 }

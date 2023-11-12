@@ -7,6 +7,7 @@ import io.bluestaggo.voxelthing.Identifier;
 import io.bluestaggo.voxelthing.util.IntList;
 import io.bluestaggo.voxelthing.world.block.Block;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,10 @@ public class BlockStorage {
 	private final BlockLayer[] layers;
 	private final IntList blockCounts = new IntList();
 	private final List<IntList> blockCountsPerLayer = new ArrayList<>();
+
+
+
+
 
 	public BlockStorage() {
 		this(new ArrayList<>());

@@ -8,10 +8,9 @@ import io.bluestaggo.voxelthing.world.IBlockAccess;
 import io.bluestaggo.voxelthing.world.World;
 import io.bluestaggo.voxelthing.world.block.Block;
 import io.bluestaggo.voxelthing.world.chunk.layer.BlockStorage;
+import org.joml.Vector3i;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.IntConsumer;
 
 public class Chunk implements IBlockAccess {
@@ -29,6 +28,9 @@ public class Chunk implements IBlockAccess {
 	private boolean needsCullingUpdate;
 
 	private short cullInfo = Short.MAX_VALUE;
+
+	public static final List<Vector3i[]>tickingBlocks=new ArrayList<>();
+
 
 	public Chunk(World world, int x, int y, int z) {
 		this(world, x, y, z, new BlockStorage());
@@ -55,6 +57,10 @@ public class Chunk implements IBlockAccess {
 		return z + (this.z << Chunk.SIZE_POW2);
 	}
 
+	public List<Vector3i[]> getTicking(){
+		return this.tickingBlocks;
+	}
+
 	@Override
 	public Block getBlock(int x, int y, int z) {
 		if (!containsLocal(x, y, z)) {
@@ -65,6 +71,13 @@ public class Chunk implements IBlockAccess {
 
 	public void setBlock(int x, int y, int z, Block block) {
 		blockStorage.setBlock(x, y, z, block);
+		Vector3i[] blockpos={new Vector3i(this.x,this.y,this.z),new Vector3i(x,y,z)};
+		boolean[] shouldchange={block.doesTick,tickingBlocks.contains(blockpos)};
+
+		if (shouldchange[0]!=shouldchange[1]){
+			if (shouldchange[0])tickingBlocks.add(blockpos);
+			else tickingBlocks.remove(blockpos);
+		}
 		hasChanged = true;
 		needsCullingUpdate = true;
 	}

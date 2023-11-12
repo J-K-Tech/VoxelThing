@@ -12,6 +12,7 @@ import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -108,11 +109,19 @@ public class WorldRenderer {
 		for (ChunkRenderer chunkRenderer : sortedCulledChunkRenderers) {
 			if (chunkRenderer.isEmpty() && !chunkRenderer.needsUpdate() || !chunkRenderer.inCamera(renderer.camera)) continue;
 
+
 			if (updates < maxUpdates) {
 				boolean neededUpdate = chunkRenderer.needsUpdate();
 				chunkRenderer.render();
 				if (neededUpdate) {
 					updates++;
+				}
+				else{
+					if (world.blocksWannaRender.get(new Vector3i(
+							chunkRenderer.getX(),chunkRenderer.getY(),chunkRenderer.getZ()))!=null){
+						chunkRenderer.renderTicking((Vector3i[]) world.blocksWannaRender.get(new Vector3i(
+								chunkRenderer.getX(),chunkRenderer.getY(),chunkRenderer.getZ())).toArray());
+					}
 				}
 			}
 
@@ -128,7 +137,7 @@ public class WorldRenderer {
 			renderer.worldShader.fade.set((float)chunkRenderer.getFadeAmount(currentTime));
 			chunkRenderer.draw();
 		}
-
+		world.blocksWannaRender=new Hashtable<>();
 		renderer.worldShader.fade.set(0.0f);
 	}
 

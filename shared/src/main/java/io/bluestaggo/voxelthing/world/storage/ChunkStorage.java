@@ -3,6 +3,7 @@ package io.bluestaggo.voxelthing.world.storage;
 import io.bluestaggo.pds.CompoundItem;
 import io.bluestaggo.voxelthing.world.World;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
+import org.joml.Vector3i;
 
 public class ChunkStorage {
 	public static final int RADIUS_POW2 = 5;
@@ -11,6 +12,10 @@ public class ChunkStorage {
 
 	private final World world;
 	private final Chunk[] chunks = new Chunk[VOLUME];
+
+	public Chunk[] getChunks() {
+		return chunks;
+	}
 
 	public ChunkStorage(World world) {
 		this.world = world;
@@ -30,6 +35,13 @@ public class ChunkStorage {
 		}
 
 		return chunk;
+	}
+	public Chunk getRealChunkAt(int x, int y, int z) {
+		if (chunks[storageCoords(x, y, z)] == null || chunks[storageCoords(x, y, z)].x != x || chunks[storageCoords(x, y, z)].y != y || chunks[storageCoords(x, y, z)].z != z) {
+			return null;
+		}
+
+		return chunks[storageCoords(x, y, z)];
 	}
 
 	public synchronized Chunk newChunkAt(int x, int y, int z) {

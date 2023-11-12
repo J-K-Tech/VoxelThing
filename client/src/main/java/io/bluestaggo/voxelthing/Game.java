@@ -14,6 +14,7 @@ import io.bluestaggo.voxelthing.world.ClientWorld;
 import io.bluestaggo.voxelthing.world.World;
 import io.bluestaggo.voxelthing.world.WorldInfo;
 import io.bluestaggo.voxelthing.world.block.Block;
+import io.bluestaggo.voxelthing.world.chunk.Chunk;
 import io.bluestaggo.voxelthing.world.entity.IPlayerController;
 import io.bluestaggo.voxelthing.world.entity.Player;
 import io.bluestaggo.voxelthing.world.storage.FolderSaveHandler;
@@ -56,7 +57,8 @@ public class Game {
 			"joel",
 			"staggo",
 			"floof",
-			"talon"
+			"talon",
+			"kinny"
 	};
 
 	private static Game instance;
@@ -217,8 +219,6 @@ public class Game {
 
 	private void update(double delta) {
 		tickTime += delta;
-		renderer.screen.scale = settings.guiScale.getValue();
-
 		GuiScreen gui = currentGui != null ? currentGui : isInWorld() ? inGameGui : null;
 
 		if (gui == null) {
@@ -253,6 +253,7 @@ public class Game {
 				assert inGameGui != null;
 				inGameGui.tick();
 				player.tick();
+				world.tick();
 			}
 		}
 
