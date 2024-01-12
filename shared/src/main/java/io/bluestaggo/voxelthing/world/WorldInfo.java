@@ -8,9 +8,13 @@ public class WorldInfo {
 	public String name = "world";
 	public long seed = new Random().nextLong();
 
+	public Integer gamemode=1;
+
 	public void deserialize(CompoundItem data) {
 		name = data.getString("name");
 		seed = data.getLong("seed");
+		gamemode =data.getInteger("gamemode");
+		if (gamemode==null)gamemode=1;
 	}
 
 	public CompoundItem serialize() {

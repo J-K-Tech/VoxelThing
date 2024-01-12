@@ -30,6 +30,7 @@ public class DebugGui extends GuiScreen {
 
 		String[] lines = {
 				"FPS", game.window.getFps() + " (" + (int)(game.window.getDeltaTime() * 1000.0D) + "ms)",
+				"ticking entities:", " "+game.getTicking(),
 				"Memory", ((totalMB - freeMB) * 100 / maxMB) + "% (" + (totalMB - freeMB) + " / " + maxMB + " MB)",
 				"GUI Scale", String.valueOf(screen.scale <= 0.0f ? "auto" : screen.scale),
 				"Position", game.isInWorld()

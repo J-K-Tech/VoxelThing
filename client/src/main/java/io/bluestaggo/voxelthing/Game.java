@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Timer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33C.glClearColor;
@@ -77,6 +78,8 @@ public class Game {
 	public Block[] palette = new Block[9];
 	public int heldItem;
 
+	public static Chunk GENERIC_CHUNK;
+
 	private final GuiScreen debugGui;
 	private final GuiScreen inGameGui;
 	private GuiScreen currentGui;
@@ -88,6 +91,8 @@ public class Game {
 
 	private double tickTime;
 	private double partialTick;
+
+
 
 	public Game() {
 		instance = this;
@@ -295,6 +300,8 @@ public class Game {
 			}
 		}
 	}
+
+	public int getTicking(){return world.getTicking();}
 
 	private void doControls() {
 		if (window.isKeyJustPressed(GLFW_KEY_R)) {

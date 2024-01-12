@@ -13,6 +13,7 @@ public abstract class StructureItem {
 	private static final List<Class<? extends StructureItem>> REGISTERED_TYPES = List.of(
 			ByteItem.class,
 			ShortItem.class,
+			IntegerItem.class,
 			IntItem.class,
 			LongItem.class,
 			FloatItem.class,
@@ -61,6 +62,10 @@ public abstract class StructureItem {
 
 	public int getInt() {
 		throw new UnsupportedOperationException(getUnsupportedMessage("int"));
+	}
+
+	public Integer getInteger(){
+		throw new UnsupportedOperationException(getUnsupportedMessage("Integer"));
 	}
 
 	public int getUnsignedByte() {

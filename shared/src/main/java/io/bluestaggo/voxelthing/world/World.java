@@ -1,8 +1,11 @@
 package io.bluestaggo.voxelthing.world;
 
 import io.bluestaggo.pds.CompoundItem;
+import io.bluestaggo.pds.IntArrayItem;
 import io.bluestaggo.voxelthing.math.AABB;
+import io.bluestaggo.voxelthing.math.AABBCCi;
 import io.bluestaggo.voxelthing.math.MathUtil;
+import io.bluestaggo.voxelthing.util.IntList;
 import io.bluestaggo.voxelthing.world.block.Block;
 import io.bluestaggo.voxelthing.world.block.BlockStair;
 import io.bluestaggo.voxelthing.world.chunk.Chunk;
@@ -11,13 +14,12 @@ import io.bluestaggo.voxelthing.world.generation.GenerationInfo;
 import io.bluestaggo.voxelthing.world.storage.ChunkStorage;
 import io.bluestaggo.voxelthing.world.storage.EmptySaveHandler;
 import io.bluestaggo.voxelthing.world.storage.ISaveHandler;
+import org.joml.Matrix3x2d;
+import org.joml.Matrix3x2dc;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class World implements IBlockAccess {
 	protected final ChunkStorage chunkStorage;
@@ -30,6 +32,8 @@ public class World implements IBlockAccess {
 	public Dictionary<Vector3i,List<Vector3i>> blocksWannaRender;
 
 	public double partialTick;
+	public final List<AABBCCi> tickingBlocks=new ArrayList<>();
+	private int ticking=0;
 
 	public World() {
 		this(null, null);
@@ -59,25 +63,37 @@ public class World implements IBlockAccess {
 		this.saveHandler = saveHandler;
 	}
 
-	public void tick(){
-		for (int i=0;i<Chunk.tickingBlocks.size();i++){
-			Vector3i[] blockPoss=Chunk.tickingBlocks.get(i);
-			Vector3i chp=new Vector3i(blockPoss[0].x,blockPoss[0].y,blockPoss[0].z);
-			Vector3i blp=new Vector3i(blockPoss[1].x,blockPoss[1].y,blockPoss[1].z);
-			chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
-					.getBlock(blp.x,blp.y,blp.z).tick();
-			if (chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
-					.getBlock(blp.x,blp.y,blp.z).renderAtTick){
-				if (this.blocksWannaRender.get(chp)==null){
-					List<Vector3i> blocks=new ArrayList<>();
-					blocks.add(blp);
-					this.blocksWannaRender.put(chp, blocks);
-				}
-				else {
-					this.blocksWannaRender.get(chp).add(blp);
+	public int getTicking(){
+		return this.ticking;
+	}
 
+	public void tick(){
+		for (int i=0;i<this.tickingBlocks.size();i++){
+			int[] blockPoss=this.tickingBlocks.get(i).asArray();
+			Vector3i chp=new Vector3i(blockPoss[0],blockPoss[1],blockPoss[2]);
+			Vector3i blp=new Vector3i(blockPoss[3],blockPoss[4],blockPoss[5]);
+			if (chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)!=null){
+				if(chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z).getBlock(blp.x,blp.y,blp.z)==null){
+				System.out.println(blp.x+" "+blp.y+" "+blp.z);
+				System.out.println(chp.x+" "+chp.y+" "+chp.z);
+				this.tickingBlocks.remove(i);
+			}
+
+				chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
+						.getBlock(blp.x,blp.y,blp.z).tick();
+				if (chunkStorage.getRealChunkAt(chp.x,chp.y,chp.z)
+						.getBlock(blp.x,blp.y,blp.z).renderAtTick){
+					if (this.blocksWannaRender.get(chp)==null){
+						List<Vector3i> blocks=new ArrayList<>();
+						blocks.add(blp);
+						this.blocksWannaRender.put(chp, blocks);
+					} else {
+						this.blocksWannaRender.get(chp).add(blp);
+
+					}
 				}
 			}
+			else {this.tickingBlocks.remove(i);}
 		}
 	}
 
@@ -119,12 +135,52 @@ public class World implements IBlockAccess {
 		if (chunk == null) {
 			return;
 		}
-		chunk.setBlock(
+		Vector3i bl=new Vector3i(
 				Math.floorMod(x, Chunk.LENGTH),
 				Math.floorMod(y, Chunk.LENGTH),
-				Math.floorMod(z, Chunk.LENGTH),
+				Math.floorMod(z, Chunk.LENGTH));
+
+		boolean doesTick=false;
+		int[] blockpos={chunk.x,chunk.y,chunk.z,bl.x,bl.y,bl.z};
+		if (block!=null){doesTick=block.doesTick;}
+
+		int index=0;
+
+		if(this.tickingBlocks.size()!=0){index=-1;
+			for (int i=0;i<this.tickingBlocks.size();i++){
+				index++;
+				if (Arrays.equals(blockpos,this.tickingBlocks.get(i).asArray())){
+					System.out.println(this.tickingBlocks.get(index));
+					System.out.println(index);
+					break;
+				}
+			}
+		}
+
+
+		boolean[] shouldchange= new boolean[]{doesTick, this.tickingBlocks.size()!=0?this.tickingBlocks.get(index)!=null:false};
+
+		ArrayList<Vector3i> a= new ArrayList<>();
+
+
+		if (block==null){
+			System.out.println(bl.x+" "+bl.y+" "+bl.z);
+			System.out.println(chunk.x+" "+chunk.y+" "+chunk.z);
+			System.out.println(shouldchange[0]+" "+shouldchange[1]);
+		}
+
+
+		if (shouldchange[0]!=shouldchange[1]){
+			if (shouldchange[0]){
+				this.tickingBlocks.add(new AABBCCi(blockpos));
+			}
+		}
+		chunk.setBlock(
+				bl.x,bl.y,bl.z,
 				block
 		);
+		System.out.println(this.tickingBlocks.size());
+		ticking=tickingBlocks.size();
 		onBlockUpdate(x, y, z);
 	}
 
@@ -165,6 +221,11 @@ public class World implements IBlockAccess {
 
 					if (block != null) {
 						chunk.setBlock(x, y, z, block);
+						if (block.doesTick){
+							this.tickingBlocks.add(new AABBCCi( cx, cy, cz,x, y, z));
+							ticking++;
+						}
+
 					}
 				}
 			}

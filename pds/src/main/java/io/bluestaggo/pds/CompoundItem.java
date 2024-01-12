@@ -65,6 +65,10 @@ public class CompoundItem extends StructureItem {
 		return map.get(key).getInt();
 	}
 
+	public Integer getInteger(String key){
+		return  map.get(key)==null?null:map.get(key).getInteger();
+	}
+
 	public int getUnsignedByte(String key) {
 		return map.get(key).getUnsignedByte();
 	}

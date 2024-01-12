@@ -26,7 +26,7 @@ public class Block {
 	public int side=0;
 
 	public boolean renderAtTick=false;
-	public boolean doesTick=false;
+	public boolean doesTick;
 
 	private int tickrate=-1;
 
@@ -66,7 +66,7 @@ public class Block {
 	public static final Block PLANKS = new Block("planks").withTex(3, 0);
 	public static final Block LOG = new Block("log").withTex(new ColumnTexture(3, 1, 4, 1));
 	public static final Block LEAVES = new Block("leaves").withTex(4, 0).transparency(BlockTransparency.THICK);
-	public static final Block GLASS = new Block("glass").withTex(4, 2).transparency(BlockTransparency.FULL);
+	public static final Block GLASS = new Block("glass").withTex(4, 2).transparency(BlockTransparency.FULL).thatTicks();
 	public static final Block SAND = new Block("sand").withTex(2, 0);
 	public static final BlockStair STONE_STAIR = (BlockStair) new BlockStair("stone_stair").withTex(1, 0);
 	public static final Block GRAVEL = new Block("gravel").withTex(2, 1);
@@ -95,6 +95,7 @@ public class Block {
 	}
 
 	public Block(Identifier id) {
+		doesTick=false;
 		if (REGISTERED_BLOCKS.containsKey(id)) {
 			throw new IllegalArgumentException("Block \"" + id + "\" already exists");
 		}
@@ -108,7 +109,7 @@ public class Block {
 		this.doesTick = ticks;
 	}
 
-	public Block thatTicks(){
+	protected Block thatTicks(){
 		this.doesTick=true;
 		return this;
 	}
@@ -180,5 +181,6 @@ public class Block {
 		return new AABB(x, y, z, x + 1, y + 1, z + 1);
 	}
 
-	public void tick(){}
+	public void tick(){
+	}
 }

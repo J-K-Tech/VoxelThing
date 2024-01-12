@@ -1,12 +1,14 @@
 package io.bluestaggo.voxelthing.math;
 
 import io.bluestaggo.voxelthing.world.Direction;
+import org.joml.Matrix3x2d;
 import org.joml.Vector3d;
 
 public class AABB {
 	private static final Vector3d[] FACES = new Vector3d[6];
 
 	public double minX;
+
 	public double minY;
 	public double minZ;
 	public double maxX;
